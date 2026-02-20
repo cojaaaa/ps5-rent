@@ -1,0 +1,256 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* ✅ Make absolute children anchor correctly */
+.container {
+  position: relative;
+  width: min(1000px, 95vw);
+  height: clamp(400px, 60vw, 540px);
+  margin: 0 auto;
+  background: #121212;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+  border-radius: 24px;
+  overflow: hidden;
+  /* prevents cards from spilling on small screens */
+}
+
+.container .slide {
+  position: relative;
+  /* important for absolute .item */
+  width: 100%;
+  height: 100%;
+  border-radius: 20px;
+}
+
+/* default card size becomes responsive */
+.container .slide .item {
+  width: clamp(140px, 22vw, 200px);
+  height: clamp(180px, 28vw, 250px);
+  position: absolute;
+  top: 50%;
+  transform: translate(0, -50%);
+  border-radius: 20px;
+  box-shadow: 0 30px 50px #505050;
+  background-position: 50% 50%;
+  background-size: cover;
+  display: inline-block;
+  transition: all 0.5s;
+}
+
+/* active + previous (full background) */
+.slide .item:nth-child(1),
+.slide .item:nth-child(2) {
+  top: 0;
+  left: 0;
+  transform: translate(0, 0);
+  width: 100%;
+  height: 100%;
+  border-radius: 24px;
+  transition: all 0.5s;
+}
+
+.slide .item:nth-child(2)::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, rgba(0, 0, 0, 0.85) 0%, rgba(0, 0, 0, 0.4) 40%, rgba(0, 0, 0, 0) 100%);
+  border-radius: 24px;
+  z-index: 1;
+}
+
+.slide .item:nth-child(n+3)::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.3);
+  border-radius: 20px;
+  transition: background 0.5s;
+}
+
+.slide .item:nth-child(n+3):hover::before {
+  background: rgba(0, 0, 0, 0.1);
+}
+
+/* side cards positioning becomes proportional */
+.slide .item:nth-child(3) {
+  left: 55%;
+}
+
+.slide .item:nth-child(4) {
+  left: calc(55% + clamp(150px, 24vw, 220px));
+}
+
+.slide .item:nth-child(5) {
+  left: calc(55% + (2 * clamp(150px, 24vw, 220px)));
+}
+
+.slide .item:nth-child(n + 6) {
+  left: calc(55% + (3 * clamp(150px, 24vw, 220px)));
+  opacity: 0;
+}
+
+/* content */
+.item .content {
+  position: absolute;
+  top: 50%;
+  left: clamp(20px, 6vw, 80px);
+  width: min(450px, 85%);
+  text-align: left;
+  color: #fff;
+  transform: translate(0, -50%);
+  font-family: 'Poppins', system-ui, sans-serif;
+  display: none;
+  padding: 1rem 0;
+  z-index: 2;
+}
+
+.slide .item:nth-child(2) .content {
+  display: block;
+}
+
+.content .name {
+  font-size: clamp(32px, 5vw, 56px);
+  text-transform: uppercase;
+  font-weight: 800;
+  opacity: 0;
+  color: #fff;
+  text-shadow: 2px 2px 15px rgba(0, 0, 0, 0.8);
+  letter-spacing: 1px;
+  animation: animate 1s ease-in-out 1 forwards;
+}
+
+.content .des {
+  font-size: clamp(15px, 2.5vw, 18px);
+  line-height: 1.5;
+  margin-top: 15px;
+  margin-bottom: 25px;
+  opacity: 0;
+  color: #e0e0e0;
+  text-shadow: 1px 1px 10px rgba(0, 0, 0, 0.8);
+  animation: animate 1s ease-in-out 0.3s 1 forwards;
+}
+
+.content button {
+  padding: 12px 28px;
+  font-size: 16px;
+  font-weight: 600;
+  border: none;
+  cursor: pointer;
+  opacity: 0;
+  border-radius: 8px;
+  background: #0070cc;
+  /* PlayStation Blue */
+  color: #fff;
+  box-shadow: 0 5px 15px rgba(0, 112, 204, 0.4);
+  transition: all 0.3s ease;
+  font-family: 'Poppins', sans-serif;
+  animation: animate 1s ease-in-out 0.6s 1 forwards;
+}
+
+.content button:hover {
+  background: #005fba;
+  box-shadow: 0 8px 25px rgba(0, 112, 204, 0.6);
+  transform: translateY(-2px);
+}
+
+@keyframes animate {
+  from {
+    opacity: 0;
+    transform: translate(0, 100px);
+    filter: blur(33px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translate(0);
+    filter: blur(0);
+  }
+}
+
+/* buttons pinned nicely */
+.button {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  bottom: 24px;
+  display: flex;
+  gap: 15px;
+  align-items: center;
+  justify-content: center;
+  width: auto;
+  z-index: 5;
+}
+
+.button button {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  border: 2px solid rgba(255, 255, 255, 0.4);
+  cursor: pointer;
+  transition: all 0.3s ease;
+  background: rgba(0, 0, 0, 0.6);
+  color: #fff;
+  font-size: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  backdrop-filter: blur(5px);
+}
+
+.button button:hover {
+  border: 2px solid rgba(255, 255, 255, 0.9);
+  background: rgba(0, 0, 0, 0.8);
+  transform: scale(1.1);
+}
+
+.button button:focus {
+  outline: none;
+  border: 2px solid #fff;
+  background: rgba(0, 0, 0, 0.9);
+}
+
+.button button:active {
+  transform: scale(0.95);
+}
+
+.next {
+  padding-left: 2px;
+}
+
+.prev {
+  padding-right: 2px;
+}
+
+/* ✅ Mobile: keep it clean + readable */
+@media (max-width: 640px) {
+
+  /* hide extra side cards on small screens (keeps layout from overflowing) */
+  .slide .item:nth-child(3),
+  .slide .item:nth-child(4),
+  .slide .item:nth-child(5) {
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  .item .content {
+    left: 16px;
+    width: calc(100% - 32px);
+  }
+
+  .content .des {
+    max-width: 42ch;
+  }
+}
+
+/* ✅ Very small screens */
+@media (max-width: 380px) {
+  .content button {
+    width: 100%;
+  }
+}
