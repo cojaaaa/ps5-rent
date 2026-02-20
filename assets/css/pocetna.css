@@ -375,6 +375,12 @@ body {
     position: relative;
 }
 
+@media screen and (max-width: 768px) {
+    .section.gameslisting {
+        padding: 20px 3vw !important;
+    }
+}
+
 .section-dark {
     background: radial-gradient(circle at top, #0b1024 0, #040616 45%, #020309 100%);
 }
